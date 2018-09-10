@@ -1,0 +1,44 @@
+drop database clothesshop;
+create database clothesshop;
+use clothesshop;
+
+CREATE TABLE Items(
+	itemcode VARCHAR(100),
+	itemname VARCHAR(100),
+	unit VARCHAR(100),
+	unitprice VARCHAR(100),
+	CONSTRAINT PRIMARY KEY (itemcode)
+);
+
+
+insert into Items values('I001','Button','2kg','20.00');
+insert into Items values('I002','Button','2kg','20.00');
+
+CREATE TABLE Estimate(
+    estimateid VARCHAR(100) NOT NULL,
+    status VARCHAR(100) NOT NULL,
+	CONSTRAINT PRIMARY KEY (estimateid)
+);
+
+insert into Estimate values('E001','Pending');
+insert into Estimate values('E001','Pending');
+insert into Estimate values('E002','Pending');
+
+CREATE TABLE EstimateDetails(
+	estimateid VARCHAR(100),
+	itemcode VARCHAR(100),
+	qty VARCHAR(100),
+	CONSTRAINT PRIMARY KEY (estimateid,itemcode),
+    CONSTRAINT FOREIGN KEY (estimateid) REFERENCES Estimate (estimateid)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT FOREIGN KEY (itemcode) REFERENCES Items (itemcode)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+insert into EstimateDetails values('E001','I001','5');
+insert into EstimateDetails values('E001','I002','5');
+insert into EstimateDetails values('E002','I002','5');
+
+select e.estimateid,e.status,ed.itemcode,ed.qty
+from Estimate e,EstimateDetails ed
+where e.estimateid = ed.estimateid;
